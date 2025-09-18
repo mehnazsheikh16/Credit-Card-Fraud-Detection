@@ -1,6 +1,6 @@
 # Real-Time Credit Card Fraud Detection System
 
-A production-ready, real-time fraud detection system using machine learning, Flask API, and cloud deployment capabilities. This project demonstrates end-to-end ML engineering skills with a focus on scalable, cloud-native architecture.
+A real-time fraud detection system using machine learning, Flask API, and cloud deployment capabilities. This project demonstrates end-to-end ML engineering skills with a focus on scalable, cloud-native architecture.
 
 ## 🚀 Features
 
@@ -161,34 +161,6 @@ docker run --rm -p 5000:5000 fraud-api
 
 Then use the web UI or CLI against http://127.0.0.1:5000
 
-## ☁️ Deploy (entry-level friendly)
-
-### Deploy to Render (Docker)
-1. Push this repo to GitHub.
-2. In Render, create New → Web Service → Connect your repo.
-3. Runtime: Docker (Render detects `Dockerfile`).
-4. Health Check Path: `/health` (Settings → Health).
-5. Environment Variables: PORT=5000 (already used in Docker CMD).
-6. Instance Type: Free (starter is fine).
-7. Deploy. Wait for “Live”.
-
-Verify:
-- Open `https://<your-service>.onrender.com/health` → should return `{ "status": "ok" }`.
-- Open `https://<your-service>.onrender.com/docs` → interactive Swagger UI.
-- Use CLI scripts with `--url` pointing to your Render URL.
-
-Tip: Render auto-deploys on push (autoDeploy=true). If you need to redeploy, push a commit.
-
-## 🌩 Cloud Deployment
-
-### AWS Lambda Deployment
-1. Package the application with dependencies
-2. Create Lambda function with API Gateway trigger
-3. Upload deployment package
-4. Configure environment variables
-
-Detailed deployment instructions: [Coming Soon]
-
 ## 🔍 Model Details
 
 The fraud detection model uses:
@@ -197,13 +169,6 @@ The fraud detection model uses:
 - **Training Data**: 284,807 transactions with 492 fraudulent cases
 - **Preprocessing**: Class balancing via undersampling (5:1 ratio)
 - **Hyperparameter Tuning**: GridSearchCV with 3-fold cross-validation
-
-## 📈 Business Impact
-
-- **Real-time Detection**: Sub-second response time for fraud scoring
-- **Cost Reduction**: 38% reduction in false negatives saves investigation costs
-- **Scalability**: Cloud-native architecture handles high transaction volumes
-- **Integration Ready**: REST API easily integrates with existing payment systems
 
 ## 🤝 Contributing
 
@@ -220,10 +185,7 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 ## 👨‍💻 Author
 
 **[Your Name]**
-- LinkedIn: [Your LinkedIn]
-- Email: [Your Email]
-- Portfolio: [Your Portfolio]
+- LinkedIn: https://www.linkedin.com/in/mehnaz-sheikh-007468202/
+- Email: msheik14@asu.edu
 
----
 
-⭐ **Star this repo if it helped you build better fraud detection systems!**
