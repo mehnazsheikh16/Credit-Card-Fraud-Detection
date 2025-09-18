@@ -1,0 +1,16 @@
+__pycache__
+.pytest_cache
+.venv
+*.pyc
+*.pyo
+*.pyd
+*.log
+.DS_Store
+data/
+notebooks/*.ipynb_checkpoints/
+*.ipynb_checkpoints
+*.ipynb
+tests/
+deploy_aws.sh
+README.md
+QUICKSTART.md

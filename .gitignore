@@ -1,0 +1,33 @@
+# Python
+__pycache__/
+*.py[cod]
+*.class
+*.so
+.Python
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# macOS
+.DS_Store
+
+# Model files (optional - you may want to include the trained model)
+# src/model/*.joblib
+
+# Data files (large datasets)
+data/*.csv
+
+# IDE
+.vscode/
+.idea/
+
+# Logs
+*.log
+
+# Virtual environment
+fraud_detection_env/

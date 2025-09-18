@@ -1,0 +1,114 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Credit Card Fraud Detection API",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/health": {
+      "get": {
+        "summary": "Health check",
+        "responses": {"200": {"description": "OK"}}
+      }
+    },
+    "/predict": {
+      "post": {
+        "summary": "Single transaction prediction",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {"$ref": "#/components/schemas/Transaction"}
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Prediction result",
+            "content": {
+              "application/json": {
+                "schema": {"$ref": "#/components/schemas/PredictResponse"}
+              }
+            }
+          },
+          "400": {"description": "Bad request"}
+        }
+      }
+    },
+    "/batch_predict": {
+      "post": {
+        "summary": "Batch CSV prediction",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {"type": "string", "format": "binary"}
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {"description": "CSV file with predictions"},
+          "400": {"description": "Bad request"}
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Transaction": {
+        "type": "object",
+        "required": [
+          "Time",
+          "V1","V2","V3","V4","V5","V6","V7","V8","V9","V10",
+          "V11","V12","V13","V14","V15","V16","V17","V18","V19","V20",
+          "V21","V22","V23","V24","V25","V26","V27","V28",
+          "Amount"
+        ],
+        "properties": {
+          "Time": {"type": "number"},
+          "V1": {"type": "number"},
+          "V2": {"type": "number"},
+          "V3": {"type": "number"},
+          "V4": {"type": "number"},
+          "V5": {"type": "number"},
+          "V6": {"type": "number"},
+          "V7": {"type": "number"},
+          "V8": {"type": "number"},
+          "V9": {"type": "number"},
+          "V10": {"type": "number"},
+          "V11": {"type": "number"},
+          "V12": {"type": "number"},
+          "V13": {"type": "number"},
+          "V14": {"type": "number"},
+          "V15": {"type": "number"},
+          "V16": {"type": "number"},
+          "V17": {"type": "number"},
+          "V18": {"type": "number"},
+          "V19": {"type": "number"},
+          "V20": {"type": "number"},
+          "V21": {"type": "number"},
+          "V22": {"type": "number"},
+          "V23": {"type": "number"},
+          "V24": {"type": "number"},
+          "V25": {"type": "number"},
+          "V26": {"type": "number"},
+          "V27": {"type": "number"},
+          "V28": {"type": "number"},
+          "Amount": {"type": "number"}
+        }
+      },
+      "PredictResponse": {
+        "type": "object",
+        "properties": {
+          "prediction": {"type": "integer", "enum": [0,1]},
+          "probability": {"type": "number"}
+        }
+      }
+    }
+  }
+}
