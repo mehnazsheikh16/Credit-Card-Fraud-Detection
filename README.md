@@ -1,191 +1,107 @@
-# Real-Time Credit Card Fraud Detection System
+# Credit Card Fraud Detection
 
-A real-time fraud detection system using machine learning, Flask API, and cloud deployment capabilities. This project demonstrates end-to-end ML engineering skills with a focus on scalable, cloud-native architecture.
+An end-to-end project that trains a machine learning model on the Kaggle credit card fraud dataset and serves real-time predictions through a Flask API. Includes single-transaction scoring, batch CSV scoring, and a simple browser-based UI for demos.
 
-## 🚀 Features
+## Features
 
-- **Machine Learning Pipeline**: Trained Random Forest model on Kaggle's Credit Card Fraud Detection dataset
-- **Real-Time API**: Flask REST API for instant fraud predictions
-- **Batch Processing**: Bulk transaction analysis with CSV upload/download
-- **Interactive Web UI**: User-friendly interface for testing and demonstrations
-- **Cloud-Ready**: Designed for AWS Lambda deployment with API Gateway
-- **Production Monitoring**: Model performance tracking and logging
+- Model training notebook (Random Forest with basic tuning)
+- REST API with:
+  - POST /predict — single JSON transaction
+  - POST /batch_predict — CSV upload → CSV with predictions
+  - GET /health — liveness probe
+- Simple web UI (HTML/JS) for quick testing
+- CORS enabled for browser calls
+- Portable setup with requirements.txt (Docker optional)
 
-## 🛠 Tech Stack
+## Dataset
 
-- **Backend**: Python, Flask, Flask-CORS
-- **ML Framework**: scikit-learn, pandas, numpy
-- **Model**: Random Forest with GridSearchCV hyperparameter tuning
-- **Storage**: joblib for model serialization
-- **Frontend**: HTML/CSS/JavaScript
-- **Cloud**: AWS Lambda, API Gateway (deployment ready)
-- **Testing**: Jupyter notebooks for exploration and validation
+Kaggle Credit Card Fraud Detection. Features V1–V28 are PCA-anonymized; Amount and Time are provided as-is. Due to class imbalance, the training notebook undersamples the majority class for a more useful recall on fraud.
 
-## 📊 Model Performance
+Link: https://www.kaggle.com/mlg-ulb/creditcardfraud
 
-- **Accuracy**: 95.2%
-- **Precision**: 0.94 (fraud detection)
-- **Recall**: 0.91 (fraud detection)
-- **F1-Score**: 0.92
-- **False Negative Reduction**: 38% compared to baseline
+## Quick Start
 
-## 🏗 Project Structure
-
-```
-credit-card-fraud-detection/
-├── data/                   # Dataset storage
-│   └── creditcard.csv     # Kaggle dataset
-├── notebooks/             # Jupyter notebooks
-│   ├── train_model.ipynb  # Model training and evaluation
-│   └── web_ui.html        # Demo interface
-├── src/
-│   ├── api/               # API implementation
-│   │   └── flask_api.py   # Flask app (run server from here)
-│   ├── model/             # Model files
-│   │   ├── rf_model.joblib # Trained model
-│   │   └── train_model.py  # Training script
-│   └── utils/             # Helper functions
-├── tests/                 # Unit tests
-├── requirements.txt       # Dependencies
-└── README.md             # Documentation
-```
-
-## 🚀 Quick Start
-
-### Prerequisites
-- Python 3.8+
-- pip package manager
-
-### Installation
-
-1. **Clone the repository**
-   ```bash
-   git clone <your-repo-url>
-   cd credit-card-fraud-detection
-   ```
-
-2. **Create virtual environment**
-   ```bash
-   python -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
-   ```
-
-3. **Install dependencies**
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-4. **Download dataset**
-   - Download the Kaggle Credit Card Fraud Detection dataset
-   - Place `creditcard.csv` in the `data/` folder
-
-### Usage
-
-#### 1. Train the Model
+1) Install dependencies
 ```bash
-# Run the training notebook or script
-jupyter notebook notebooks/train_model.ipynb
-# OR
-python src/model/train_model.py
+pip install -r requirements.txt
 ```
 
-#### 2. Start the API Server
+2) Train the model (optional if a model file already exists)
+- Open and run: notebooks/train_model.ipynb  
+- Output: src/model/rf_model.joblib
+
+3) Start the API
 ```bash
-cd src/api
+cd notebooks
 python flask_api.py
-```
-Server runs on `http://127.0.0.1:5000`
-
-#### 3. Test the Web UI
-Open `notebooks/web_ui.html` in your browser to test predictions interactively.
-
-## 📡 API Documentation
-
-### Single Prediction Endpoint
-**POST** `/predict`
-
-**Request Body:**
-```json
-{
-  "V1": -1.3598071336738,
-  "V2": -0.0727811733098497,
-  ...
-  "V28": -0.0210530534538215,
-  "Amount": 149.62,
-  "Time": 0.0
-}
+# Server runs on http://127.0.0.1:5000 (or the PORT env var if set)
 ```
 
-**Response:**
-```json
-{
-  "prediction": 0,
-  "probability": 0.01
-}
-```
-
-### Batch Prediction Endpoint
-**POST** `/batch_predict`
-
-**Request:** Upload CSV file with transaction data
-
-**Response:** CSV file with added `prediction` and `probability` columns
-
-## 🧪 Testing
-
-### Run unit tests (optional)
+4) Health check
 ```bash
-pytest -q
+curl http://127.0.0.1:5000/health
 ```
 
-### Try the Web UI
-1. Start the Flask server (see above)
-2. Open `notebooks/web_ui.html` in your browser
-3. Click "Fill with Sample Data" for quick testing
-4. View real-time predictions
-
-### CLI clients (optional)
-- Single prediction: `scripts/predict_single.py --payload path/to/sample.json`
-- Batch prediction: `scripts/batch_predict.py --csv path/to/transactions.csv`
-
-Sample JSON: `samples/sample_transaction.json`
-
-## 🐳 Docker (optional)
-
-Build and run the API in a container:
-
+5) Single prediction (example)
 ```bash
-docker build -t fraud-api .
-docker run --rm -p 5000:5000 fraud-api
+curl -X POST http://127.0.0.1:5000/predict \
+  -H "Content-Type: application/json" \
+  -d '{
+    "Time": 0.0,
+    "V1": -1.36, "V2": -0.07, "V3": 2.53, "V4": 1.38,
+    "V5": -0.34, "V6": 0.46, "V7": 0.24, "V8": 0.10, "V9": 0.36,
+    "V10": 0.09, "V11": -0.55, "V12": -0.62, "V13": -0.99, "V14": -0.31,
+    "V15": 1.47, "V16": -0.47, "V17": 0.21, "V18": 0.03, "V19": 0.40,
+    "V20": 0.25, "V21": -0.02, "V22": 0.28, "V23": -0.11, "V24": 0.07,
+    "V25": 0.13, "V26": -0.19, "V27": 0.13, "V28": -0.02,
+    "Amount": 149.62
+  }'
 ```
 
-Then use the web UI or CLI against http://127.0.0.1:5000
+6) Batch prediction (CSV)
+```bash
+curl -X POST -F "file=@test_transactions.csv" \
+  http://127.0.0.1:5000/batch_predict -o batch_predictions.csv
+```
 
-## 🔍 Model Details
+7) Web UI
+- With the API running, open notebooks/web_ui.html in a browser
+- Use “Fill with Sample Data” to test quickly
 
-The fraud detection model uses:
-- **Algorithm**: Random Forest Classifier
-- **Features**: 30 features (V1-V28 from PCA transformation, Amount, Time)
-- **Training Data**: 284,807 transactions with 492 fraudulent cases
-- **Preprocessing**: Class balancing via undersampling (5:1 ratio)
-- **Hyperparameter Tuning**: GridSearchCV with 3-fold cross-validation
+## Project Structure
 
-## 🤝 Contributing
+```
+.
+├── notebooks/
+│   ├── train_model.ipynb      # Data prep, training, evaluation, save model
+│   └── flask_api.py           # Flask API (run from here)
+│   └── web_ui.html            # Simple browser UI
+├── src/
+│   └── model/
+│       └── rf_model.joblib    # Saved model (created by the notebook)
+├── requirements.txt
+└── README.md
+```
 
-1. Fork the repository
-2. Create feature branch (`git checkout -b feature/new-feature`)
-3. Commit changes (`git commit -am 'Add new feature'`)
-4. Push to branch (`git push origin feature/new-feature`)
-5. Create Pull Request
+## Notes on Inputs
 
-## 📄 License
+- Expected features (30): Time, V1–V28, Amount
+- The API maps by feature names and enforces model order internally
+- For batch CSV, headers must include all required feature names; order is auto-aligned
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+## Metrics
 
-## 👨‍💻 Author
+Evaluation metrics are shown in notebooks/train_model.ipynb after training. Results may vary by run due to sampling and random seeds.
 
-**Mehnaz Sheikh**
-- LinkedIn: https://www.linkedin.com/in/mehnaz-sheikh-007468202/
-- Email: msheik14@asu.edu
+## Deployment (when ready)
 
+- Works on platforms like Render or any environment that supports Python/Flask
+- The server binds to 0.0.0.0 and reads PORT from the environment if set
+- Add a health check to /health for liveness
 
+## Future Improvements
+
+- Basic auth or API key for protected endpoints
+- Automated retraining pipeline
+- Logging/monitoring for requests and predictions
+- Additional sampling strategies or alternative models
