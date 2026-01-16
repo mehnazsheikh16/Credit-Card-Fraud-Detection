@@ -92,16 +92,3 @@ curl -X POST -F "file=@test_transactions.csv" \
 ## Metrics
 
 Evaluation metrics are shown in notebooks/train_model.ipynb after training. Results may vary by run due to sampling and random seeds.
-
-## Deployment (when ready)
-
-- Works on platforms like Render or any environment that supports Python/Flask
-- The server binds to 0.0.0.0 and reads PORT from the environment if set
-- Add a health check to /health for liveness
-
-## Future Improvements
-
-- Basic auth or API key for protected endpoints
-- Automated retraining pipeline
-- Logging/monitoring for requests and predictions
-- Additional sampling strategies or alternative models
